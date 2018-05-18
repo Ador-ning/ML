@@ -51,7 +51,7 @@ def reg_err(data):
     :param data:
     :return:
     """
-    return np.var(data[:-1] * np.shape(data)[0])
+    return np.var(data[:, -1] * np.shape(data)[0])
 
 
 def choose_best_split(data, leaf_type, error_type, ops):
@@ -96,7 +96,7 @@ def choose_best_split(data, leaf_type, error_type, ops):
     return best_feature, best_value
 
 
-def create_tree(data, leaf_type=reg_leaf, error_type=reg_err, ops=(1, 4)):
+def create_tree(data, leaf_type=reg_leaf, error_type=reg_err, ops=(4, 10)):
     # 选择最佳分割
     feature, value = choose_best_split(data, leaf_type, error_type, ops)
 
@@ -113,7 +113,10 @@ def create_tree(data, leaf_type=reg_leaf, error_type=reg_err, ops=(1, 4)):
 
 
 if __name__ == '__main__':
-    data_ = load_data('ex00.txt')
+    data_ = load_data('ex0.txt')
     # print(data_)
-    print(create_tree(np.matrix(data_)))
+    print(create_tree(np.matrix(data_))['split_value'])
+    print(create_tree(np.matrix(data_))['left_data'])
+    print(create_tree(np.matrix(data_))['right_data'])
+
     # pass
