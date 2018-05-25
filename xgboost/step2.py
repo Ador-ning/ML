@@ -7,6 +7,8 @@ from sklearn.tree import DecisionTreeRegressor
 from sklearn.ensemble import RandomForestRegressor, GradientBoostingRegressor
 import matplotlib.pyplot as plt
 
+from ipywidgets import interact, IntSlider, FloatSlider
+
 
 def ground_truth(x):
     """ Function to approximate """
@@ -95,12 +97,38 @@ def xgb_hyper_params():
     plt.show()
 
 
+def search_xgb_hyper():
+    n_estimators_slider = IntSlider(min=1, max=1000, step=10, value=30)
+    max_depth_slider = IntSlider(min=1, max=15, step=1, value=3)
+    learning_rate_slider = FloatSlider(min=0.01, max=0.3, step=0.01, value=0.1)
+    subsample_slider = FloatSlider(min=0.1, max=1, step=0.1, value=1.0)
+    gamma_slider = FloatSlider(min=0.1, max=1, step=0.1, value=0)
+    reg_alpha_slider = FloatSlider(min=0.1, max=1, step=0.1, value=0)
+    reg_lambda_slider = FloatSlider(min=0.1, max=1, step=0.1, value=1.0)
+
+    @interact(n_estimators=n_estimators_slider, max_depth=max_depth_slider, learning_rate=learning_rate_slider,
+              subsample=subsample_slider, gamma=gamma_slider, reg_alpha=reg_alpha_slider, reg_lambda=reg_lambda_slider)
+    def plot(n_estimators, max_depth, learning_rate, subsample, gamma, reg_alpha, reg_lambda):
+        model = xgb.XGBRegressor(n_estimators=n_estimators, max_depth=max_depth, learning_rate=learning_rate,
+                                 subsample=subsample, gamma=gamma, reg_alpha=reg_alpha, reg_lambda=reg_lambda)
+        model.fit(X_train, Y_train)
+        predict = model.predict(X_test)
+        plt.plot(x_plot, predict[:, np.newaxis],
+                 label='XGB n_estimators={0}, max_depth={1}, learning_rate={2}, subsample={3}, gamma={4}, reg_alpha={5}, reg_lambda={6}'.format(
+                     n_estimators, max_depth, learning_rate, subsample, gamma, reg_alpha, reg_lambda), \
+                 color='g', alpha=0.9, linewidth=2)
+
+    plt.legend(loc='upper left')
+    plt.show()
+
+
 if __name__ == '__main__':
     X_train, X_test, Y_train, Y_test = generate_data(n_samples=100)
     x_plot = np.linspace(0, 10, 500)
     plot_data()
     # rt_hyper_param()
     # rf_hyper_params()
-    xgb_hyper_params()
+    # xgb_hyper_params()
+    search_xgb_hyper()
     annotation_kw = {'xycoords': 'data', 'textcoords': 'data',
                      'arrowprops': {'arrowstyle': '->', 'connectionstyle': 'arc'}}
