@@ -140,8 +140,8 @@ if __name__ == '__main__':
     d['datetime'] = pd.to_datetime(d['datetime'])
     d['day'] = d['datetime'].map(lambda x: x.day)  # day
 
-    for max_depth in [2, 3, 4, 5]:
-        for n_estimators in [20, 30, 50, 100, 150]:
+    for max_depth in [2]:
+        for n_estimators in [150, 151, 152, 153, 154, 155, 156, 157, 158, 159, 160, 161, 162, 163]:
             params = {'max_depth': max_depth, 'n_estimators': n_estimators}
             m = xgb.XGBRegressor(**params)
             print(params, registered_casual_prediction(d, m))
