@@ -108,4 +108,7 @@ venv.bak/
 
 # data
 *.svm
+.txt
+
 .idea/
+.DS_Store
