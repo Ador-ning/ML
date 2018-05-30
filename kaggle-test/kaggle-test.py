@@ -29,7 +29,7 @@ if __name__ == '__main__':
         'silent': 0,  # 设置成1则没有运行信息输出，最好是设置为0.
         'eta': 0.007,  # 如同学习率
         'seed': 1000,
-        'nthread': 7,  # cpu 线程数
+        'nthread': 15,  # cpu 线程数
         # 'eval_metric': 'auc'
     }
 
@@ -53,7 +53,7 @@ if __name__ == '__main__':
     print("Start training model.")
     model = xgb.train(params, xgb_train, num_rounds, watchlist, early_stopping_rounds=100)
 
-    model.save_model('./model/xgb.model')  # 用于存储训练出的模型
+    model.save_model('xgb.model')  # 用于存储训练出的模型
     print("best best_ntree_limit", model.best_ntree_limit)
 
     print("Start predict")
